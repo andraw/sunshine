@@ -26,12 +26,12 @@ die "Host ID should be 6 character hexadecimal string.\n" unless($hostid !~ m/[^
 
 my @mkp = $hostid =~ /(..)/g;
 
-my $checksum_int = hex("A9") ^ hex(@mkp[0]) ^  hex(@mkp[1]) ^ hex(@mkp[2]) ^ hex(@mkp[0]) ^ hex(@mkp[1]) ^ hex(@mkp[2] );
+my $checksum_int = hex("A9") ^ hex($mkp[0]) ^  hex($mkp[1]) ^ hex($mkp[2]) ^ hex($mkp[0]) ^ hex($mkp[1]) ^ hex($mkp[2] );
 my $checksum = sprintf("%X", $checksum_int);
 
 print "\n";
 print "Host id  : 80" . $hostid . "\n";
-print "Ethernet : 8:0:20:" . @mkp[0] . ":" . @mkp[1] . ":" . @mkp[2] . "\n\n";
+print "Ethernet : 8:0:20:" . $mkp[0] . ":" . $mkp[1] . ":" . $mkp[2] . "\n\n";
 
 print "Enter or paste the following at the ok prompt:\n\n"; 
 
