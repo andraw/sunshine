@@ -1,0 +1,56 @@
+#!/usr/bin/env perl
+#
+# nvram_calc - Displays commands for resetting SUN NVRAM
+#              based upon a given host id.  
+#
+# Version 1.0  Tested on Ultra 5 / Ultra 10 OBP
+#
+# Andrew Rawlins, Jan 2024
+
+use warnings;
+use strict;
+
+print "nvram_calc - Displays commands for resetting SUN NVRAM ";
+print "based on a given host id.\n\n";
+print "The existing host id can be found on the top of the dead ";
+print "NVRAM - usually a yellow sticker, if not a host id can be ";
+print "any 6 character hexadecimal string - such as 'c0ffee'.\n\n";
+  
+print "What is the host id?\n";
+my $hostid = <>;
+chomp $hostid;
+lc $hostid;
+ 
+die "Host ID should be 6 character hexadecimal string.\n" unless(length $hostid eq 6);
+die "Host ID should be 6 character hexadecimal string.\n" unless($hostid !~ m/[^[:xdigit:]]/  );
+
+my @mkp = $hostid =~ /(..)/g;
+
+my $checksum_int = hex("A9") ^ hex(@mkp[0]) ^  hex(@mkp[1]) ^ hex(@mkp[2]) ^ hex(@mkp[0]) ^ hex(@mkp[1]) ^ hex(@mkp[2] );
+my $checksum = sprintf("%X", $checksum_int);
+
+print "\n";
+print "Host id  : 80" . $hostid . "\n";
+print "Ethernet : 8:0:20:" . @mkp[0] . ":" . @mkp[1] . ":" . @mkp[2] . "\n\n";
+
+print "Enter or paste the following at the ok prompt:\n\n"; 
+
+print "set-defaults\n";
+print "1 0 mkp\n";
+print "80 1 mkp\n";
+print "8 2 mkp\n";
+print "0 3 mkp\n";
+print "20 4 mkp\n";
+print $mkp[0] . " 5 mkp\n";
+print $mkp[1] . " 6 mkp\n";
+print $mkp[2] . " 7 mkp\n";
+print "0 8 mkp\n";
+print "0 9 mkp\n";
+print "0 a mkp\n";
+print "0 b mkp\n";
+print $mkp[0] . " c mkp\n";
+print $mkp[1] . " d mkp\n";
+print $mkp[2] . " e mkp\n";
+print $checksum . " f mkp\n\n";
+
+# The Checksum always appears to be A9 ... :)
