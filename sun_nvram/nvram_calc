@@ -52,5 +52,6 @@ print $mkp[0] . " c mkp\n";
 print $mkp[1] . " d mkp\n";
 print $mkp[2] . " e mkp\n";
 print $checksum . " f mkp\n\n";
+print "reset\n\n";
 
 # The Checksum always appears to be A9 ... :)
